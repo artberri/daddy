@@ -47,7 +47,7 @@ daddy show --domain mydomain.com -t A -n www
 Check https://developer.godaddy.com/doc/endpoint/domains#/operations/v1/recordGet
 for more information.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		records, err := GodaddyClient.GetDomain(domain, dnsType, dnsName)
+		records, err := GodaddyClient.GetDNSRecords(domain, dnsType, dnsName)
 		if err != nil {
 			return err
 		}
@@ -72,15 +72,6 @@ for more information.`,
 		table.SetBorder(false)
 		table.AppendBulk(data)
 		table.Render()
-		return nil
-	},
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		if len(domain) == 0 {
-			return errors.New("Empty domain, this parameter is required")
-		}
-		if len(dnsName) > 0 && len(dnsType) == 0 {
-			return errors.New("You need to filter also by type to filter by name")
-		}
 		return nil
 	},
 }

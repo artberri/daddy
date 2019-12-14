@@ -17,12 +17,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package client
 
 import (
+	"errors"
+
 	"github.com/artberri/daddy/internal/types"
 )
 
-// GetDomain retrieves the indicated domain's DNS entries info
-func (c *Client) GetDomain(domain string, dnsType string, dnsName string) ([]types.Record, error) {
-	path := "/v1/domains/" + domain + "/records/"
+// GetDNSRecords retrieves the indicated domain's DNS entries info
+func (c *Client) GetDNSRecords(domain string, dnsType string, dnsName string) ([]types.Record, error) {
+	if len(domain) == 0 {
+		return nil, errors.New("Empty domain, this parameter is required")
+	}
+	if len(dnsName) > 0 && len(dnsType) == 0 {
+		return nil, errors.New("You need to filter also by type to filter by name")
+	}
+
+	path := "/v1/domains/" + domain + "/records"
 	if len(dnsType) > 0 {
 		path += "/" + dnsType
 	}

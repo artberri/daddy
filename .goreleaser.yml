@@ -13,9 +13,12 @@ builds:
 - goos:
   - linux
   - darwin
+  - windows
   goarch:
   - amd64
   - "386"
+  - arm
+  - arm64
   goarm:
   - "6"
   main: .

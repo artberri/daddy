@@ -33,12 +33,10 @@ var dnsName string
 
 var showCmd = &cobra.Command{
 	Use:     "show",
-	Aliases: []string{"sh"},
+	Aliases: []string{"sh", "s"},
 	Short:   "Show domain records",
 	Long: `Show DNS records of a single domain. You can filter them by type
 and/or by name. For example:
-
-daddy show
 
 daddy show --domain mydomain.com
 
@@ -66,11 +64,12 @@ for more information.`,
 				r.Data,
 				strconv.Itoa(r.TTL),
 				strconv.Itoa(r.Priority),
+				strconv.Itoa(r.Port),
 			}
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Type", "Name", "Data", "TTL", "Priority"})
+		table.SetHeader([]string{"Type", "Name", "Data", "TTL", "Priority", "Port"})
 		table.SetBorder(false)
 		table.AppendBulk(data)
 		table.Render()

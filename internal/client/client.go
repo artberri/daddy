@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -69,6 +70,7 @@ func (c *Client) newRequest(method, path string, body interface{}) (*http.Reques
 			return nil, err
 		}
 	}
+
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
@@ -90,10 +92,13 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 	defer resp.Body.Close()
 
 	if !(resp.StatusCode >= 200 && resp.StatusCode <= 299) {
-		return nil, fmt.Errorf("Invalid response status `%s`", resp.Status)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("Invalid response status `%s`. Response body: %s", resp.Status, string(bodyBytes))
 	}
 
-	err = json.NewDecoder(resp.Body).Decode(v)
+	if v != nil {
+		err = json.NewDecoder(resp.Body).Decode(v)
+	}
 	return resp, err
 }
 

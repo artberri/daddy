@@ -20,13 +20,13 @@ package types
 
 // Record represents a domain record.
 type Record struct {
-	Data     string
-	Name     string
-	Port     int
-	Priority int
-	Protocol string
-	Service  string
-	TTL      int
-	Type     string
-	Weight   int
+	Data     string `json:"data"`
+	Name     string `json:"name"`
+	Port     int    `json:"port"`
+	Priority int    `json:"priority"`
+	Protocol string `json:"protocol"`
+	Service  string `json:"service"`
+	TTL      int    `json:"ttl"`
+	Type     string `json:"type"`
+	Weight   int    `json:"weight"`
 }

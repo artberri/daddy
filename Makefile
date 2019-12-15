@@ -52,7 +52,6 @@ qa: formatcheck vet lint test
 
 COVERAGE_MODE    = atomic
 COVERAGE_PROFILE = $(COVERAGE_DIR)/profile.out
-COVERAGE_XML     = $(COVERAGE_DIR)/coverage.xml
 COVERAGE_HTML    = $(COVERAGE_DIR)/index.html
 coverage: COVERAGE_DIR := $(CURDIR)/coverage/$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 coverage:

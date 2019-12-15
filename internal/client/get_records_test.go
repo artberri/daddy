@@ -27,7 +27,7 @@ import (
 
 func TestGetDNSRecordsThrowsErrorIfNoDomainSet(t *testing.T) {
 	testDomain := ""
-	expectedPath := "/v1/domainss/" + testDomain + "/records"
+	expectedPath := "/v1/domains/" + testDomain + "/records"
 	expectedMethod := "GET"
 	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 

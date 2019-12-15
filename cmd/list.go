@@ -31,7 +31,7 @@ var status string
 
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Aliases: []string{"ls"},
+	Aliases: []string{"ls", "l"},
 	Short:   "List owned domains",
 	Long: `List owned domains. You can filter them by status (by
 default VISIBLE domains are shown). For example:

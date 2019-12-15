@@ -20,7 +20,6 @@ package client
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/artberri/daddy/internal/types"
 )
@@ -42,9 +41,7 @@ func (c *Client) UpdateDNSRecord(domain string, dnsType string, dnsName string, 
 
 	path := "/v1/domains/" + domain + "/records/" + dnsType + "/" + dnsName
 
-	fmt.Println(path)
-
-	req, err := c.newRequest("PUT", path, []types.Record{types.Record{
+	req, err := c.newRequest("PUT", path, []types.Record{{
 		Type:     dnsType,
 		Name:     dnsName,
 		Data:     dnsValue,

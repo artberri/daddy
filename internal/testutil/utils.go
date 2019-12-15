@@ -90,3 +90,46 @@ func CreateTestServer(t *testing.T, expectedMethod string, expectedPath string, 
 		rw.Write([]byte(`[]`))
 	}))
 }
+
+// CreateTestServerWithPreviousGetResponse creates a test server ready for two response
+func CreateTestServerWithPreviousGetResponse(t *testing.T, firstResponse interface{}, expectedMethod string, expectedPath string, expectedBody interface{}) *httptest.Server {
+	expectedAuthorizationHeader := "sso-key " + TestAPIKey + ":" + TestAPISecret
+
+	return httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		if req.Header.Get("Authorization") != expectedAuthorizationHeader {
+			t.Fatalf("Authorization header should be '%s' but '%s' given", expectedAuthorizationHeader, req.Header.Get("Authorization"))
+		}
+		if req.Method != expectedMethod && req.Method != "GET" {
+			t.Fatalf("Method should be '%s', '%s' given", expectedMethod, req.Method)
+		}
+		if req.URL.Path != expectedPath {
+			t.Fatalf("Path should be '%s' but '%s' given", expectedPath, req.URL.Path)
+		}
+
+		var buf io.ReadWriter
+		if req.Method != "GET" {
+			buf = new(bytes.Buffer)
+			err := json.NewEncoder(buf).Encode(expectedBody)
+			if err != nil {
+				t.Fatal("Can't encode test body")
+			}
+			var records []types.Record
+			err = json.NewDecoder(req.Body).Decode(&records)
+			if err != nil {
+				t.Fatal("Can't decode request body")
+			}
+			if !reflect.DeepEqual(expectedBody, records) {
+				t.Fatal("Not expected body")
+			}
+		}
+
+		fr := new(bytes.Buffer)
+		err := json.NewEncoder(fr).Encode(firstResponse)
+		if err != nil {
+			t.Fatal("Can't encode first response")
+		}
+
+		rw.WriteHeader(200)
+		rw.Write(fr.Bytes())
+	}))
+}

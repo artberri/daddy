@@ -1,7 +1,6 @@
 # daddy
 
 [![Build Status](https://travis-ci.org/artberri/daddy.svg?branch=master)](https://travis-ci.org/artberri/daddy)
-[![GoDoc](https://godoc.org/github.com/artberri/daddy?status.svg)](https://godoc.org/github.com/artberri/daddy)
 [![Go Report Card](https://goreportcard.com/badge/artberri/daddy)](https://goreportcard.com/report/artberri/daddy)
 [![Coverage Status](https://coveralls.io/repos/github/artberri/daddy/badge.svg?branch=master)](https://coveralls.io/github/artberri/daddy?branch=master)
 
@@ -53,6 +52,8 @@ secret: 1234567689
 | list    | List owned domains     |
 | show    | Show DNS records       |
 | add     | Add DNS record         |
+| update  | Update DNS records     |
+| remove  | Remove DNS records     |
 
 ## License
 

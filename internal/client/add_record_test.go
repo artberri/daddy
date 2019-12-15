@@ -123,7 +123,7 @@ func TestAddDNSRecordCallsProperURLWithProperBody(t *testing.T) {
 	testTTL := 3600
 	expectedPath := "/v1/domains/" + testDomain + "/records"
 	expectedMethod := "PATCH"
-	server := testutil.CreateTestServerWithBody(t, expectedMethod, expectedPath, []types.Record{types.Record{
+	server := testutil.CreateTestServerWithBody(t, expectedMethod, expectedPath, []types.Record{{
 		Type:     testType,
 		Name:     testName,
 		Data:     testValue,

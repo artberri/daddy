@@ -24,8 +24,8 @@ import (
 	"github.com/artberri/daddy/internal/types"
 )
 
-// AddDNSRecord adds the indicated domain's DNS entriy
-func (c *Client) AddDNSRecord(domain string, dnsType string, dnsName string, dnsValue string, dnsTTL int, dnsPrority int) error {
+// RemoveDNSRecords removes the indicated domain's DNS entries by type and name
+func (c *Client) RemoveDNSRecords(domain string, dnsType string, dnsName string) error {
 	if len(domain) == 0 {
 		return errors.New("Empty domain, this parameter is required")
 	}
@@ -35,23 +35,20 @@ func (c *Client) AddDNSRecord(domain string, dnsType string, dnsName string, dns
 	if len(dnsName) == 0 {
 		return errors.New("Empty dns name, this parameter is required")
 	}
-	if len(dnsValue) == 0 {
-		return errors.New("Empty dns value, this parameter is required")
+
+	newRecords := []types.Record{}
+	records, err := c.GetDNSRecords(domain, dnsType, "")
+	for _, r := range records {
+		if r.Type != dnsType || r.Name != dnsName {
+			if r.Port == 0 {
+				r.Port = 1
+			}
+			newRecords = append(newRecords, r)
+		}
 	}
 
-	path := "/v1/domains/" + domain + "/records"
-
-	req, err := c.newRequest("PATCH", path, []types.Record{{
-		Type:     dnsType,
-		Name:     dnsName,
-		Data:     dnsValue,
-		TTL:      dnsTTL,
-		Priority: dnsPrority,
-		Port:     1,
-		Service:  "",
-		Protocol: "",
-		Weight:   0,
-	}})
+	path := "/v1/domains/" + domain + "/records/" + dnsType
+	req, err := c.newRequest("PUT", path, newRecords)
 	if err != nil {
 		return err
 	}

@@ -64,12 +64,11 @@ for more information.`,
 				r.Data,
 				strconv.Itoa(r.TTL),
 				strconv.Itoa(r.Priority),
-				strconv.Itoa(r.Port),
 			}
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Type", "Name", "Data", "TTL", "Priority", "Port"})
+		table.SetHeader([]string{"Type", "Name", "Data", "TTL", "Priority"})
 		table.SetBorder(false)
 		table.AppendBulk(data)
 		table.Render()

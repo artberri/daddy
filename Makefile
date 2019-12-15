@@ -1,7 +1,7 @@
 .PHONY: help all formatcheck format test vet lint qa coverage
 
 GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
-FILES_WITHOUT_PROPER_FORMAT?=$$(gofmt -l ${GOFMT_FILES})
+FILES_WITHOUT_PROPER_FORMAT?=$$(gofmt -l -s ${GOFMT_FILES})
 
 help:
 	@echo ""
@@ -29,7 +29,7 @@ formatcheck:
 
 format:
 	@echo "Formatting files..."
-	@gofmt -w $(GOFMT_FILES)
+	@gofmt -w -s $(GOFMT_FILES)
 	@echo "OK"
 
 test:

@@ -20,5 +20,7 @@ install:
 - sudo snap install snapcraft --classic
 - go get github.com/mattn/goveralls
 
-script: make qa
+script: make qa-ci
 
+after_success:
+- test -n "$TRAVIS_TAG" || $GOPATH/bin/goveralls -service=travis-ci -coverprofile=coverage/profile.out

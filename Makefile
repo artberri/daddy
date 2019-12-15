@@ -54,8 +54,6 @@ lint: $(GOLINT)
 	@test -z "$$(golint ./...)"
 	@echo "OK"
 
-qa: formatcheck vet lint test
-
 COVERAGE_MODE    = atomic
 COVERAGE_PROFILE = $(COVERAGE_DIR)/profile.out
 COVERAGE_HTML    = $(COVERAGE_DIR)/index.html
@@ -67,3 +65,6 @@ coverage:
 		-covermode=$(COVERAGE_MODE) \
 		-coverprofile="$(COVERAGE_PROFILE)" ./...
 	go tool cover -html=$(COVERAGE_PROFILE) -o $(COVERAGE_HTML)
+
+qa: formatcheck vet lint test
+qa-ci: formatcheck vet lint coverage

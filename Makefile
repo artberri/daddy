@@ -3,6 +3,12 @@
 GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 FILES_WITHOUT_PROPER_FORMAT?=$$(gofmt -l -s ${GOFMT_FILES})
 
+# Tools
+BIN_DIR = $(GOPATH)/bin
+GOLINT = $(BIN_DIR)/golint
+$(GOLINT):
+	go get -u golang.org/x/lint/golint
+
 help:
 	@echo ""
 	@echo "The following commands are available:"
@@ -42,12 +48,9 @@ vet:
 	@go vet ./...
 	@echo "OK"
 
-lint:
+lint: $(GOLINT)
 	@echo "Checking for style errors..."
-	@golint 2>/dev/null; if [ $$? -eq 3 ]; then \
-		go get -u golang.org/x/lint/golint; \
-	fi
-	@golint ./...
+	golint ./...
 	@test -z "$$(golint ./...)"
 	@echo "OK"
 

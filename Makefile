@@ -44,6 +44,9 @@ vet:
 
 lint:
 	@echo "Checking for style errors..."
+	@golint 2>/dev/null; if [ $$? -eq 3 ]; then \
+		go get -u golang.org/x/lint/golint; \
+	fi
 	@golint ./...
 	@test -z "$$(golint ./...)"
 	@echo "OK"

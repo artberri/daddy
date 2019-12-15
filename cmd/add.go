@@ -49,7 +49,7 @@ for more information.`,
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	addCmd.Flags().StringVarP(&addDomain, "domain", "d", "", "Domain you want to query records from (Required)")
+	addCmd.Flags().StringVarP(&addDomain, "domain", "d", "", "Domain you want to add record to (Required)")
 	addCmd.Flags().StringVarP(&addDNSType, "type", "t", "", "DNS Record type (Required)")
 	addCmd.Flags().StringVarP(&addDNSName, "name", "n", "", "DNS Record name (Required)")
 	addCmd.Flags().StringVarP(&addDNSValue, "value", "v", "", "DNS Record data (Required)")

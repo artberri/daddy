@@ -54,10 +54,10 @@ lint: $(GOLINT)
 	@test -z "$$(golint ./...)"
 	@echo "OK"
 
+COVERAGE_DIR     = coverage
 COVERAGE_MODE    = atomic
 COVERAGE_PROFILE = $(COVERAGE_DIR)/profile.out
 COVERAGE_HTML    = $(COVERAGE_DIR)/index.html
-coverage: COVERAGE_DIR := $(CURDIR)/coverage/$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 coverage:
 	@echo "Running coverage..."
 	mkdir -p $(COVERAGE_DIR)

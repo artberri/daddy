@@ -14,25 +14,26 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Package client contains the http client for the GoDaddy API
 package client
 
 import (
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
-	"github.com/artberri/daddy/internal/client/testutil"
+	"github.com/artberri/daddy/internal/testutil"
 )
 
 func TestGetDNSRecordsThrowsErrorIfNoDomainSet(t *testing.T) {
 	testDomain := ""
-	expectedPath := "/v1/domains/" + testDomain + "/records"
+	expectedPath := "/v1/domainss/" + testDomain + "/records"
 	expectedMethod := "GET"
-	server := testutil.CreateTestServer(t, expectedMethod, expectedPath)
+	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 
 	defer server.Close()
 
-	c := createClient(server)
+	c := createRecordsClient(server)
 
 	_, err := c.GetDNSRecords(testDomain, "", "")
 
@@ -47,11 +48,11 @@ func TestGetDNSRecordsThrowsErrorIfNameSetWithoutType(t *testing.T) {
 	testDNSName := "other.org"
 	expectedPath := "/v1/domains/" + testDomain + "/records/" + testDNSType + "/" + testDNSName
 	expectedMethod := "GET"
-	server := testutil.CreateTestServer(t, expectedMethod, expectedPath)
+	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 
 	defer server.Close()
 
-	c := createClient(server)
+	c := createRecordsClient(server)
 
 	_, err := c.GetDNSRecords(testDomain, testDNSType, testDNSName)
 
@@ -64,11 +65,11 @@ func TestGetDNSRecordsCallsProperURLWithOnlyDomainParameter(t *testing.T) {
 	testDomain := "example.com"
 	expectedPath := "/v1/domains/" + testDomain + "/records"
 	expectedMethod := "GET"
-	server := testutil.CreateTestServer(t, expectedMethod, expectedPath)
+	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 
 	defer server.Close()
 
-	c := createClient(server)
+	c := createRecordsClient(server)
 
 	records, err := c.GetDNSRecords(testDomain, "", "")
 
@@ -86,11 +87,11 @@ func TestGetDNSRecordsCallsProperURLWithDomainAndTypeParameter(t *testing.T) {
 	testDNSType := "A"
 	expectedPath := "/v1/domains/" + testDomain + "/records/" + testDNSType
 	expectedMethod := "GET"
-	server := testutil.CreateTestServer(t, expectedMethod, expectedPath)
+	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 
 	defer server.Close()
 
-	c := createClient(server)
+	c := createRecordsClient(server)
 
 	records, err := c.GetDNSRecords(testDomain, testDNSType, "")
 
@@ -109,11 +110,11 @@ func TestGetDNSRecordsCallsProperURLWithDomainAndTypeAndNameParameter(t *testing
 	testDNSName := "other.org"
 	expectedPath := "/v1/domains/" + testDomain + "/records/" + testDNSType + "/" + testDNSName
 	expectedMethod := "GET"
-	server := testutil.CreateTestServer(t, expectedMethod, expectedPath)
+	server := testutil.CreateSimpleTestServer(t, expectedMethod, expectedPath)
 
 	defer server.Close()
 
-	c := createClient(server)
+	c := createRecordsClient(server)
 
 	records, err := c.GetDNSRecords(testDomain, testDNSType, testDNSName)
 
@@ -126,13 +127,7 @@ func TestGetDNSRecordsCallsProperURLWithDomainAndTypeAndNameParameter(t *testing
 	}
 }
 
-func createClient(server *httptest.Server) *Client {
-	url, _ := url.Parse(server.URL)
-	return &Client{
-		baseURL:    url,
-		apiKey:     testutil.TestAPIKey,
-		apiSecret:  testutil.TestAPISecret,
-		userAgent:  defaultUserAgent,
-		httpClient: server.Client(),
-	}
+func createRecordsClient(server *httptest.Server) *Client {
+	c, _ := CreateClient(server.URL, testutil.TestAPIKey, testutil.TestAPISecret, server.Client())
+	return c
 }

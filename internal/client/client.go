@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Package client contains the http client for the GoDaddy API
 package client
 
 import (
@@ -30,27 +32,27 @@ const defaultUserAgent = "daddy-cli"
 
 // Client is the HTTPClient for the GoDaddy API
 type Client struct {
-	baseURL   *url.URL
-	apiKey    string
-	apiSecret string
-	userAgent string
+	BaseURL   *url.URL
+	APIKey    string
+	APISecret string
+	UserAgent string
 
-	httpClient *http.Client
+	HTTPClient *http.Client
 }
 
 // CreateClient creates an HTTPClient for the GoDaddy API
-func CreateClient(baseURL string, apiKey string, apiSecret string) (*Client, error) {
+func CreateClient(baseURL string, apiKey string, apiSecret string, c *http.Client) (*Client, error) {
 	url, err := parseBaseURL(baseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{
-		baseURL:    url,
-		apiKey:     apiKey,
-		apiSecret:  apiSecret,
-		userAgent:  defaultUserAgent,
-		httpClient: &http.Client{},
+		BaseURL:    url,
+		APIKey:     apiKey,
+		APISecret:  apiSecret,
+		UserAgent:  defaultUserAgent,
+		HTTPClient: c,
 	}, nil
 }
 
@@ -58,7 +60,7 @@ func (c *Client) newRequest(method, path string, body interface{}) (*http.Reques
 	rel := &url.URL{
 		Path: path,
 	}
-	u := c.baseURL.ResolveReference(rel)
+	u := c.BaseURL.ResolveReference(rel)
 	var buf io.ReadWriter
 	if body != nil {
 		buf = new(bytes.Buffer)
@@ -75,13 +77,13 @@ func (c *Client) newRequest(method, path string, body interface{}) (*http.Reques
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", c.userAgent)
-	req.Header.Set("Authorization", "sso-key "+c.apiKey+":"+c.apiSecret)
+	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("Authorization", "sso-key "+c.APIKey+":"+c.APISecret)
 	return req, nil
 }
 
 func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

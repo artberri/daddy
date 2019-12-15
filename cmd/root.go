@@ -14,11 +14,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Package cmd defines the commands of the daddy cli
 package cmd
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/artberri/daddy/internal/client"
@@ -65,7 +68,7 @@ secret: 1234567689
 			return errors.New("Empty API Secret, this parameter is required")
 		}
 
-		c, err := client.CreateClient(url, key, secret)
+		c, err := client.CreateClient(url, key, secret, &http.Client{})
 		if err != nil {
 			return err
 		}

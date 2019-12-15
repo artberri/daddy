@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Package client contains the http client for the GoDaddy API
 package client
 
 import (
@@ -30,8 +32,12 @@ func (c *Client) GetDomains(statusGroups []string, status string) ([]types.Domai
 	}
 
 	q := req.URL.Query()
-	q.Add("statusGroups", strings.Join(statusGroups, ","))
-	q.Add("status", status)
+	if len(statusGroups) > 0 {
+		q.Add("statusGroups", strings.Join(statusGroups, ","))
+	}
+	if len(status) > 0 {
+		q.Add("status", status)
+	}
 	req.URL.RawQuery = q.Encode()
 
 	var domains []types.Domain

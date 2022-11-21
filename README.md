@@ -1,8 +1,7 @@
-# daddy
+> **Warning**
+> This project is not maintained anymore (I am not using GoDaddy anymore)
 
-[![Build Status](https://travis-ci.com/artberri/daddy.svg?branch=master)](https://travis-ci.com/artberri/daddy)
-[![Go Report Card](https://goreportcard.com/badge/artberri/daddy)](https://goreportcard.com/report/artberri/daddy)
-[![Coverage Status](https://coveralls.io/repos/github/artberri/daddy/badge.svg?branch=master)](https://coveralls.io/github/artberri/daddy?branch=master)
+# daddy
 
 `daddy` is a command line interface to manage DNS records in GoDaddy.
 
